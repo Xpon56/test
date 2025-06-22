@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0 mt-4">
+                <div class="card-header bg-success text-white py-3">
+                    <h2 class="mb-0 text-center"><i class="bi bi-truck"></i> Новая заявка на перевозку</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Вывод общих ошибок формы -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Дата/время и Вес груза -->
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.transport_date.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-calendar-event"></i> Дата и время перевозки
+                                </label>
+                                {{ form.transport_date }}
+                                {% if form.transport_date.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.transport_date.errors %}
+                                            <small>{{ error }}</small><br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="invalid-feedback">
+                                    Пожалуйста, укажите дату и время перевозки.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.weight.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-speedometer2"></i> Вес груза (кг)
+                                </label>
+                                <div class="input-group">
+                                    {{ form.weight }}
+                                    <span class="input-group-text bg-light">кг</span>
+                                </div>
+                                {% if form.weight.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.weight.errors %}
+                                            <small>{{ error }}</small><br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Приблизительный вес</div>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, укажите вес груза.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Габариты груза -->
+                        <div class="mb-4">
+                            <label for="{{ form.dimensions.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-aspect-ratio"></i> Габариты груза
+                            </label>
+                            {{ form.dimensions }}
+                            {% if form.dimensions.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.dimensions.errors %}
+                                        <small>{{ error }}</small><br>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">Укажите размеры в формате: Длина x Ширина x Высота (см)</div>
+                            <div class="invalid-feedback">
+                                Пожалуйста, укажите габариты груза.
+                            </div>
+                        </div>
+                        
+                        <!-- Тип груза -->
+                        <div class="mb-4">
+                            <label for="{{ form.cargo_type.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-box-seam"></i> Тип груза
+                            </label>
+                            {{ form.cargo_type }}
+                            {% if form.cargo_type.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.cargo_type.errors %}
+                                        <small>{{ error }}</small><br>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <div class="invalid-feedback">
+                                Пожалуйста, выберите тип груза.
+                            </div>
+                        </div>
+                        
+                        <!-- Адреса отправления и доставки -->
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.from_address.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-geo-alt"></i> Адрес отправления
+                                </label>
+                                {{ form.from_address }}
+                                {% if form.from_address.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.from_address.errors %}
+                                            <small>{{ error }}</small><br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="invalid-feedback">
+                                    Пожалуйста, укажите адрес отправления.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.to_address.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-geo-alt-fill"></i> Адрес доставки
+                                </label>
+                                {{ form.to_address }}
+                                {% if form.to_address.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.to_address.errors %}
+                                            <small>{{ error }}</small><br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="invalid-feedback">
+                                    Пожалуйста, укажите адрес доставки.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Кнопка отправки -->
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold">
+                                <i class="bi bi-send-check"></i> Отправить заявку
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Добавляем иконки Bootstrap -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+    }
+    
+    .form-label {
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .input-group-text {
+        border-radius: 0 8px 8px 0;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+        border: none;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #0b5ed7, #0a58ca);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+    }
+</style>
+
+<script>
+    // Добавляем валидацию формы
+    (function () {
+        'use strict'
+        
+        // Получаем формы, к которым нужно применить кастомные стили валидации Bootstrap
+        var forms = document.querySelectorAll('.needs-validation')
+        
+        // Перебираем их и предотвращаем отправку
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+{% endblock %}

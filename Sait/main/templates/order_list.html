@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Мои заявки</h2>
+    <a href="{% url 'order_create' %}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Новая заявка
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Дата перевозки</th>
+                <th>Тип груза</th>
+                <th>Статус</th>
+                <th>Отзыв</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order, form in orders %}
+            <tr>
+                <td>{{ order.transport_date|date:"d.m.Y H:i" }}</td>
+                <td>{{ order.get_cargo_type_display }}</td>
+                <td>
+                    <span class="badge 
+                        {% if order.status == 'new' %}bg-primary
+                        {% elif order.status == 'in_progress' %}bg-warning
+                        {% else %}bg-secondary{% endif %}">
+                        {{ order.get_status_display }}
+                    </span>
+                </td>
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <div class="input-group">
+                            {{ form.feedback }}
+                            <button type="submit" class="btn btn-sm btn-outline-primary">✓</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,4 @@
+login: admin
+password: gruzovik2024
+
+URL : http://127.0.0.1:8000/login/?next=/admin_panel/
